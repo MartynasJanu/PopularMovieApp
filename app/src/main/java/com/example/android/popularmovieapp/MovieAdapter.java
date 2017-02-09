@@ -29,7 +29,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder forecastAdapterViewHolder, int position) {
-        String title = position + movies.get(position).original_title;
+        String title = movies.get(position).original_title;
         forecastAdapterViewHolder.tvMovie.setText(title);
     }
 

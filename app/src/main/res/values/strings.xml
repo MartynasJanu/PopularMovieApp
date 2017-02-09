@@ -1,5 +1,4 @@
 <resources>
-    <string name="API_KEY">510534db34a94e8c595a4d0382d336f0</string>
     <string name="app_name">Popular Movie App</string>
     <string name="large_text">Loading...</string>
     <string name="action_settings">Settings</string>

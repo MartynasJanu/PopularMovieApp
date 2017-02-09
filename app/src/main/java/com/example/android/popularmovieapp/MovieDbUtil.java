@@ -68,8 +68,7 @@ public class MovieDbUtil {
                 "api_key",
                 ListActivity.resources.getString(R.string.API_KEY)
         };
-
-
+        
         ArrayList<String[]> params = new ArrayList<String[]>();
         params.add(apiKey);
 
