@@ -2,6 +2,7 @@ package com.example.android.popularmovieapp;
 
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,13 +12,19 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
     public static Resources resources;
+
+    public static int page = 1;
+
+    public static TextView tvMovies = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +43,35 @@ public class ListActivity extends AppCompatActivity {
         });
 
         resources = getResources();
+        tvMovies = (TextView) findViewById(R.id.tv_debug);
 
-        MovieDbUtil.getPopular();
+        updateUI();
+    }
+
+    public void updateUI() {
+        new ListActivityTask().execute();
+    }
+
+    public static void redrawMovies(ArrayList<MovieStruct> movies) {
+        ListActivity.tvMovies.setText("");
+
+        for (MovieStruct movie : movies) {
+            ListActivity.tvMovies.append(movie.title + "\n\n");
+        }
+    }
+
+    class ListActivityTask extends AsyncTask<Void, Void, ArrayList<MovieStruct>> {
+        @Override
+        protected ArrayList<MovieStruct> doInBackground(Void... params) {
+            ArrayList<MovieStruct> movies = MovieDbUtil.getPopular(ListActivity.page);
+            return movies;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<MovieStruct> movies) {
+            super.onPostExecute(movies);
+            ListActivity.redrawMovies(movies);
+        }
     }
 
     public String getMovies() {
