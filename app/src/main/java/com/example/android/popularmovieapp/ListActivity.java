@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +26,8 @@ public class ListActivity extends AppCompatActivity {
 
     public static int page = 1;
 
-    public static TextView tvMovies = null;
+    private RecyclerView recyclerView;
+    private MovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,9 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
+        wireUpRecyclerView();
+
         resources = getResources();
-        tvMovies = (TextView) findViewById(R.id.tv_debug);
 
         updateUI();
     }
@@ -52,12 +56,15 @@ public class ListActivity extends AppCompatActivity {
         new ListActivityTask().execute();
     }
 
-    public static void redrawMovies(ArrayList<MovieStruct> movies) {
-        ListActivity.tvMovies.setText("");
-
-        for (MovieStruct movie : movies) {
-            ListActivity.tvMovies.append(movie.title + "\n\n");
-        }
+    private void wireUpRecyclerView() {
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        movieAdapter = new MovieAdapter();
+        recyclerView.setAdapter(movieAdapter);
+        recyclerView.setVisibility(recyclerView.VISIBLE);
     }
 
     class ListActivityTask extends AsyncTask<Void, Void, ArrayList<MovieStruct>> {
@@ -70,34 +77,8 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<MovieStruct> movies) {
             super.onPostExecute(movies);
-            ListActivity.redrawMovies(movies);
+            movieAdapter.setData(movies);
         }
-    }
-
-    public String getMovies() {
-        URL url = buildUrl();
-
-        return url.toString();
-    }
-
-    public URL buildUrl() {
-        // http://api.themoviedb.org/3/movie/popular?api_key=510534db34a94e8c595a4d0382d336f0
-
-        Uri uri = Uri.parse("http://api.themoviedb.org/3/movie/popular")
-                .buildUpon()
-                .appendQueryParameter("api_key", getString(R.string.API_KEY))
-                .build();
-
-        URL url = null;
-        try {
-            url = new URL(uri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        Log.v("movie app", "Built URI " + url);
-
-        return url;
     }
 
     @Override
