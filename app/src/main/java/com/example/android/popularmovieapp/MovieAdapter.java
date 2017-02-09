@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -28,9 +31,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     @Override
-    public void onBindViewHolder(MovieAdapterViewHolder forecastAdapterViewHolder, int position) {
+    public void onBindViewHolder(MovieAdapterViewHolder movieAdapterViewHolder, int position) {
         String title = movies.get(position).original_title;
-        forecastAdapterViewHolder.tvMovie.setText(title);
+        //movieAdapterViewHolder.tvMovie.setText(title);
+        Picasso.with(ListActivity.context)
+            .load(movies.get(position).getFullPosterPath())
+            .into(movieAdapterViewHolder.imgPoster);
     }
 
     @Override
@@ -43,11 +49,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
-        public final TextView tvMovie;
+        //public final TextView tvMovie;
+        public final ImageView imgPoster;
 
         public MovieAdapterViewHolder(View view) {
             super(view);
-            tvMovie = (TextView) view.findViewById(R.id.tv_movie_title);
+            //tvMovie = (TextView) view.findViewById(R.id.tv_movie_title);
+            imgPoster = (ImageView) view.findViewById(R.id.img_movie_poster);
         }
     }
 

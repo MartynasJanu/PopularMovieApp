@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MovieStruct {
+    public static final String BASE_IMAGE_PATH = "http://image.tmdb.org/t/p";
+    public static final String IMAGE_SIZE = "w500";
+
     public int id;
     public String original_language;
     public String original_title;
@@ -61,5 +64,13 @@ public class MovieStruct {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getFullPosterPath() {
+        return this.buildImagePath(this.poster_path);
+    }
+
+    private String buildImagePath(String imagePath) {
+        return BASE_IMAGE_PATH + "/" + IMAGE_SIZE + "/" + imagePath;
     }
 }

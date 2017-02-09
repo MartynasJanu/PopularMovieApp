@@ -32,9 +32,8 @@ public class NetworkUtil {
     }
 
     public static URL buildUrl(String host, String path, ArrayList<String[]> params) {
-        Uri.Builder uriBuilder = Uri.parse(host)
+        Uri.Builder uriBuilder = Uri.parse("http://" + host)
                 .buildUpon()
-                .scheme("http")
                 .appendEncodedPath(path);
 
         for (String[] keyValue : params) {
@@ -71,6 +70,9 @@ public class NetworkUtil {
             } else {
                 return null;
             }
+        } catch (Exception e) {
+            int i = 0;
+            return null;
         } finally {
             urlConnection.disconnect();
         }
